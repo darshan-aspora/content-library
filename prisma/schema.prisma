@@ -1,0 +1,94 @@
+// Scalable-by-design: SQLite locally; switch `provider` to "postgresql" for Vercel
+// without touching the models. Facets are indexed scalar columns; tags are a proper
+// many-to-many; categories form a self-referential tree (pillars -> subfolders).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id        String     @id @default(cuid())
+  code      String? // "00", "01"… for top-level pillars
+  name      String
+  slug      String     @unique
+  note      String?
+  order     Int        @default(0)
+  parentId  String?
+  parent    Category?  @relation("Tree", fields: [parentId], references: [id], onDelete: Cascade)
+  children  Category[] @relation("Tree")
+  assets    Asset[]
+  createdAt DateTime   @default(now())
+
+  @@index([parentId])
+}
+
+model Asset {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  type        String // pdf | script | image | video | gif | template | graphic
+  pod         String   @default("general") // general | remittance | gold | nri
+  platform    String   @default("all") // all | instagram | x | youtube
+  language    String   @default("en") // en | ml
+  creatorType String   @default("any") // any | finance | non-finance
+
+  // Media (nullable so metadata-only/sample assets can exist before a file is attached)
+  fileName String?
+  fileKey  String? // storage key/path returned by the storage layer
+  mimeType String?
+  fileSize Int?
+  thumbKey String? // optional separate thumbnail key
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+  tags       Tag[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([pod])
+  @@index([platform])
+  @@index([language])
+  @@index([creatorType])
+  @@index([type])
+}
+
+model Tag {
+  id     String  @id @default(cuid())
+  name   String  @unique
+  assets Asset[]
+}
+
+// App accounts. Everyone logs in; "superadmin" additionally manages assets &
+// categories. Email verification is intentionally out of scope for now.
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         String   @default("user") // user | superadmin
+  createdAt    DateTime @default(now())
+}
+
+// Creators can request a new creative when the library doesn't have what they need.
+// Admins triage these from the "Requests" tab.
+model CreativeRequest {
+  id             String   @id @default(cuid())
+  title          String
+  description    String?
+  pod            String   @default("general") // general | remittance | gold | nri
+  platform       String   @default("all") // all | instagram | x | youtube
+  requesterName  String?
+  requesterEmail String?
+  status         String   @default("new") // new | in-progress | done
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([status])
+}
