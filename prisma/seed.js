@@ -9,12 +9,17 @@ function hashPassword(password) {
   return `${salt}:${hash}`;
 }
 
-// Seed accounts (no email verification for now). Passwords are dev defaults.
+// Seed accounts (no email verification for now).
+// Passwords are read from environment variables so no secret ever lives in the
+// repo. Set them in your local .env (and in Vercel) before seeding, e.g.:
+//   SEED_SUPERADMIN_PASSWORD, SEED_USER1_PASSWORD, SEED_USER2_PASSWORD, SEED_USER3_PASSWORD
+// If a variable is missing the user is skipped (so a partial .env never wipes
+// an existing account's password with an empty value).
 const users = [
-  { name: "Darshan Suthar", email: "darshan.suthar@aspora.com", password: "Aspora@Super1", role: "superadmin" },
-  { name: "Priya Nair", email: "priya.nair@aspora.com", password: "Aspora@User1", role: "user" },
-  { name: "Arjun Menon", email: "arjun.menon@aspora.com", password: "Aspora@User2", role: "user" },
-  { name: "Meera Pillai", email: "meera.pillai@aspora.com", password: "Aspora@User3", role: "user" },
+  { name: "Darshan Suthar", email: "darshan.suthar@aspora.com", password: process.env.SEED_SUPERADMIN_PASSWORD, role: "superadmin" },
+  { name: "Priya Nair", email: "priya.nair@aspora.com", password: process.env.SEED_USER1_PASSWORD, role: "user" },
+  { name: "Arjun Menon", email: "arjun.menon@aspora.com", password: process.env.SEED_USER2_PASSWORD, role: "user" },
+  { name: "Meera Pillai", email: "meera.pillai@aspora.com", password: process.env.SEED_USER3_PASSWORD, role: "user" },
 ];
 
 // Information architecture: top-level pillars + their subfolders.
@@ -205,7 +210,13 @@ async function main() {
   }
 
   // Users — upsert by email so re-seeding refreshes passwords/roles idempotently.
+  // Skip any user whose password env var is unset so we never write an empty hash.
+  let seededUsers = 0;
   for (const u of users) {
+    if (!u.password) {
+      console.warn(`Skipping ${u.email}: no password env var set.`);
+      continue;
+    }
     await prisma.user.upsert({
       where: { email: u.email },
       update: { name: u.name, role: u.role, passwordHash: hashPassword(u.password) },
@@ -216,6 +227,10 @@ async function main() {
         passwordHash: hashPassword(u.password),
       },
     });
+    seededUsers++;
+  }
+  if (seededUsers === 0) {
+    console.warn("No user passwords found in env — skipped all account seeding.");
   }
 
   const cats = await prisma.category.count();
