@@ -63,38 +63,59 @@ export default function CategoryManager({ categories, onChanged }) {
     }
   };
 
-  const Row = ({ cat, child }) => (
-    <div className={`flex items-center gap-2 py-1.5 ${child ? "pl-6" : ""}`}>
-      <span>{child ? "↳" : "📁"}</span>
-      <span className={`${child ? "text-[13px] text-slate-700" : "font-medium text-slate-800"}`}>{cat.name}</span>
-      {cat.note && <span className="truncate text-[12px] text-slate-400">— {cat.note}</span>}
-      <span className="ml-auto flex gap-1">
-        {!child && (
-          <button onClick={() => setModal({ mode: "add", parent: cat })} className="rounded-md px-2 py-0.5 text-[12px] font-medium text-brand hover:bg-brand/10">+ Subfolder</button>
-        )}
-        <button onClick={() => setModal({ mode: "edit", category: cat })} className="rounded-md px-2 py-0.5 text-[12px] font-medium text-slate-500 hover:bg-slate-100">Rename</button>
-        <button onClick={() => del(cat)} className="rounded-md px-2 py-0.5 text-[12px] font-medium text-red-500 hover:bg-red-50">Delete</button>
-      </span>
-    </div>
+  const Actions = ({ cat, child }) => (
+    <span className="ml-auto flex shrink-0 items-center gap-1">
+      {!child && (
+        <button onClick={() => setModal({ mode: "add", parent: cat })} className="rounded-full px-2.5 py-1 text-[12px] font-medium text-brand hover:bg-brand/10">+ Subfolder</button>
+      )}
+      <button onClick={() => setModal({ mode: "edit", category: cat })} className="rounded-full px-2.5 py-1 text-[12px] font-medium text-slate-500 hover:bg-slate-100">Rename</button>
+      <button onClick={() => del(cat)} className="rounded-full px-2.5 py-1 text-[12px] font-medium text-red-500 hover:bg-red-50">Delete</button>
+    </span>
   );
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-slate-700">Categories</h2>
-        <button onClick={() => setModal({ mode: "add", parent: null })} className="rounded-lg bg-brand px-3.5 py-2 text-sm font-semibold text-white hover:bg-brand/90">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <div>
+          <h2 className="text-base font-semibold text-slate-900">Categories</h2>
+          <p className="text-[13px] text-slate-500">Pillars and their subfolders — two levels deep.</p>
+        </div>
+        <button onClick={() => setModal({ mode: "add", parent: null })} className="shrink-0 rounded-full bg-brand px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-brand/90">
           + Add pillar
         </button>
       </div>
 
-      <div className="divide-y divide-slate-100 rounded-xl border border-slate-200 bg-white px-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {tree.map((p) => (
-          <div key={p.id} className="py-1">
-            <Row cat={p} />
-            {p.children.map((c) => <Row key={c.id} cat={c} child />)}
+          <div key={p.id} className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white ring-1 ring-slate-200/60">
+            <div className="flex items-center gap-2 border-b border-slate-100 px-4 py-3">
+              <span className="text-base">📁</span>
+              <div className="min-w-0">
+                <p className="truncate font-semibold text-slate-900">{p.name}</p>
+                {p.note && <p className="truncate text-[12px] text-slate-400">{p.note}</p>}
+              </div>
+              <Actions cat={p} />
+            </div>
+            <div className="flex flex-1 flex-col divide-y divide-slate-50">
+              {p.children.map((c) => (
+                <div key={c.id} className="flex items-center gap-2 px-4 py-2.5">
+                  <span className="text-slate-300">↳</span>
+                  <div className="min-w-0">
+                    <p className="truncate text-[13px] text-slate-700">{c.name}</p>
+                    {c.note && <p className="truncate text-[12px] text-slate-400">{c.note}</p>}
+                  </div>
+                  <Actions cat={c} child />
+                </div>
+              ))}
+              {p.children.length === 0 && (
+                <p className="px-4 py-3 text-[12px] text-slate-400">No subfolders yet.</p>
+              )}
+            </div>
           </div>
         ))}
-        {tree.length === 0 && <p className="py-10 text-center text-slate-400">No categories yet.</p>}
+        {tree.length === 0 && (
+          <p className="col-span-full rounded-2xl border border-dashed border-slate-200 py-12 text-center text-slate-400">No categories yet.</p>
+        )}
       </div>
 
       {modal && (

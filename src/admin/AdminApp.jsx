@@ -29,26 +29,26 @@ export default function AdminApp() {
   const openRequests = requests.filter((r) => r.status !== "done").length;
 
   return (
-    <div className="min-h-full">
-      <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-[1200px] items-center gap-4 px-6 py-3">
+    <div className="min-h-full bg-white">
+      <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/85 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-[1400px] items-center gap-4 px-5 py-3 sm:px-8">
           <div className="flex items-center gap-2.5">
             <Logo className="text-xl" />
             <span className="hidden h-5 w-px bg-slate-200 sm:block" />
             <span className="hidden text-sm font-semibold text-slate-700 sm:block">Admin · Content Library</span>
           </div>
-          <nav className="ml-6 flex gap-1">
+          <nav className="ml-4 flex gap-1">
             {["assets", "categories", "requests"].map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[13px] font-medium capitalize transition ${
-                  tab === t ? "bg-brand/10 text-brand" : "text-slate-600 hover:bg-slate-100"
+                className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-medium capitalize transition ${
+                  tab === t ? "bg-slate-900 text-white" : "text-slate-600 hover:bg-slate-100"
                 }`}
               >
                 {t}
                 {t === "requests" && openRequests > 0 && (
-                  <span className="rounded-full bg-brand px-1.5 text-[11px] font-semibold text-white">
+                  <span className={`rounded-full px-1.5 text-[11px] font-semibold ${tab === t ? "bg-white/20 text-white" : "bg-brand text-white"}`}>
                     {openRequests}
                   </span>
                 )}
@@ -63,7 +63,7 @@ export default function AdminApp() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1200px] px-6 py-6">
+      <main className="mx-auto w-full max-w-[1400px] px-5 py-6 sm:px-8">
         {tab === "assets" ? (
           <AssetsManager assets={assets} categories={categories} onChanged={load} />
         ) : tab === "categories" ? (

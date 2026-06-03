@@ -1,61 +1,57 @@
 import AssetThumb from "./AssetThumb";
-import TypeIcon from "./TypeIcon";
-import { typeMeta } from "../lib/meta";
+import { productMeta, typeMeta } from "../lib/meta";
 
+// Mobbin-style card: a tall, phone-aspect media tile that opens on click,
+// with the title + product chip sitting quietly underneath. No inline
+// buttons — the whole tile is the affordance, detail lives in the lightbox.
 export default function AssetCard({ asset, onPreview }) {
+  const p = productMeta[asset.pod] ?? productMeta.general;
   const t = typeMeta[asset.type] ?? typeMeta.graphic;
-  const hasFile = Boolean(asset.fileUrl);
+  const isVideo = asset.type === "video" || /^video\//.test(asset.mimeType || "");
 
   return (
-    <div className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white transition hover:border-slate-300 hover:shadow-[0_1px_3px_rgba(0,0,0,0.08),0_4px_12px_rgba(0,0,0,0.06)]">
+    <div className="group flex flex-col">
       <button
         onClick={() => onPreview(asset)}
-        className="relative block h-32 w-full border-b border-slate-100"
-        title="Preview"
+        title={asset.title}
+        className="relative block w-full overflow-hidden rounded-2xl bg-slate-100 ring-1 ring-slate-200/70 transition duration-200 group-hover:-translate-y-0.5 group-hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] group-hover:ring-slate-300"
       >
-        <AssetThumb asset={asset} className="h-32 w-full" />
-        {asset.language === "ml" && (
-          <span className="absolute right-2.5 top-2.5 rounded bg-white/90 px-1.5 py-0.5 text-[10px] font-semibold text-slate-700 ring-1 ring-slate-200">
-            Malayalam
-          </span>
-        )}
+        <div className="aspect-[9/16]">
+          <AssetThumb asset={asset} className="h-full w-full" />
+        </div>
+
+        {/* Top-right badges */}
+        <div className="pointer-events-none absolute right-2.5 top-2.5 flex gap-1.5">
+          {asset.language === "ml" && (
+            <span className="rounded-md bg-white/90 px-1.5 py-0.5 text-[10px] font-semibold text-slate-700 shadow-sm backdrop-blur">
+              ML
+            </span>
+          )}
+          {isVideo && (
+            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-black/55 text-white backdrop-blur">
+              <svg viewBox="0 0 20 20" fill="currentColor" className="h-3 w-3">
+                <path d="M6.5 4.5v11l9-5.5-9-5.5Z" />
+              </svg>
+            </span>
+          )}
+        </div>
+
+        {/* Hover veil */}
+        <div className="absolute inset-0 bg-slate-900/0 transition group-hover:bg-slate-900/[0.04]" />
       </button>
 
-      <div className="flex flex-1 flex-col p-3">
-        <div className="flex items-center gap-2">
-          <TypeIcon
-            type={asset.type}
-            className="h-4 w-4 shrink-0"
-            strokeWidth={1.8}
-            style={{ color: t.accent }}
-          />
-          <h3 className="truncate text-[13px] font-semibold text-slate-900" title={asset.title}>
-            {asset.title}
-          </h3>
-        </div>
-        <p className="mt-0.5 truncate pl-6 text-[11px] text-slate-400">{asset.categoryName}</p>
-
-        <div className="mt-3 flex gap-2">
-          <button
-            onClick={() => onPreview(asset)}
-            className="flex-1 rounded-lg border border-slate-200 px-2 py-1.5 text-[12px] font-medium text-slate-700 transition hover:bg-slate-50"
+      <div className="mt-2.5 px-0.5">
+        <h3 className="truncate text-[13px] font-semibold text-slate-900" title={asset.title}>
+          {asset.title}
+        </h3>
+        <div className="mt-1 flex items-center gap-1.5">
+          <span
+            className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[11px] font-medium"
+            style={{ backgroundColor: `${p.accent}1a`, color: p.accent }}
           >
-            Preview
-          </button>
-          <a
-            href={hasFile ? asset.fileUrl : undefined}
-            download={hasFile ? asset.fileName || "" : undefined}
-            aria-disabled={!hasFile}
-            onClick={(e) => !hasFile && e.preventDefault()}
-            title={hasFile ? "Download" : "No file uploaded yet"}
-            className={`flex-1 rounded-lg px-2 py-1.5 text-center text-[12px] font-medium transition ${
-              hasFile
-                ? "bg-brand text-white hover:bg-brand/90"
-                : "cursor-not-allowed bg-slate-100 text-slate-400"
-            }`}
-          >
-            Download
-          </a>
+            {p.label}
+          </span>
+          <span className="truncate text-[11px] text-slate-400">{t.label}</span>
         </div>
       </div>
     </div>

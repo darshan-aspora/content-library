@@ -10,6 +10,25 @@ export const typeMeta = {
   graphic: { label: "Graphic", emoji: "🎨", accent: "#6366f1" },
 };
 
+// Products are the database-backed categories (the indexed `pod` column). They
+// are surfaced as the primary, always-visible header tabs — the spine of the
+// Mobbin-style navigation. `accent` tints the active tab + card chip.
+export const productMeta = {
+  gold: { label: "Gold", accent: "#d9a441" },
+  remittance: { label: "Remittance", accent: "#0b5cff" },
+  nri: { label: "NRI Banking", accent: "#10b981" },
+  general: { label: "General", accent: "#64748b" },
+};
+
+// Tab order for the header. `all` is synthetic (no pod filter).
+export const PRODUCTS = [
+  { id: "all", label: "All" },
+  { id: "gold", label: "Gold" },
+  { id: "remittance", label: "Remittance" },
+  { id: "nri", label: "NRI Banking" },
+  { id: "general", label: "General" },
+];
+
 export const facets = {
   pod: [
     { id: "general", label: "General" },

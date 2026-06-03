@@ -14,7 +14,7 @@ export default function AssetThumb({ asset, className = "" }) {
           src={asset.fileUrl}
           alt={asset.title}
           loading="lazy"
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover object-top"
         />
       </div>
     );
