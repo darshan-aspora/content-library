@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { productMeta, typeMeta, labelOf, formatBytes } from "../lib/meta";
+import { downloadFile } from "../lib/download";
 import TypeIcon from "./TypeIcon";
 
 function MediaView({ asset }) {
@@ -23,7 +24,14 @@ function MediaView({ asset }) {
   if (/^video\//.test(mime))
     return <video src={asset.fileUrl} controls autoPlay className="max-h-[78vh] w-auto rounded-xl bg-black shadow-2xl" />;
   if (mime === "application/pdf")
-    return <iframe src={asset.fileUrl} title={asset.title} className="h-[78vh] w-[60vw] max-w-3xl rounded-xl border border-white/10 bg-white" />;
+    // #toolbar=0&navpanes=0 hides the browser PDF viewer's header + thumbnail rail.
+    return (
+      <iframe
+        src={`${asset.fileUrl}#toolbar=0&navpanes=0&view=FitH`}
+        title={asset.title}
+        className="h-[78vh] w-[60vw] max-w-3xl rounded-xl border border-white/10 bg-white"
+      />
+    );
   return (
     <div className="flex h-[50vh] w-[80vw] max-w-lg items-center justify-center rounded-xl bg-white/5 text-sm text-slate-300">
       Preview not available for this file type — use Download.
@@ -122,16 +130,16 @@ export default function PreviewModal({ asset, onClose, onPrev, onNext }) {
           </div>
         )}
 
-        <a
-          href={hasFile ? asset.fileUrl : undefined}
-          download={hasFile ? asset.fileName || "" : undefined}
-          onClick={(e) => !hasFile && e.preventDefault()}
+        <button
+          type="button"
+          disabled={!hasFile}
+          onClick={() => downloadFile(asset.fileUrl, asset.fileName || asset.title || "download")}
           className={`mt-6 rounded-xl px-4 py-2.5 text-center text-sm font-semibold transition ${
             hasFile ? "bg-white text-slate-900 hover:bg-slate-100" : "cursor-not-allowed bg-white/10 text-slate-500"
           }`}
         >
           {hasFile ? "Download" : "No file yet"}
-        </a>
+        </button>
       </aside>
     </div>
   );

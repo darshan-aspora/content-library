@@ -44,6 +44,7 @@ function dto(a) {
     categoryName: a.category?.name,
     fileName: a.fileName,
     fileUrl: storage.publicUrl(a.fileKey),
+    thumbUrl: a.thumbKey ? storage.publicUrl(a.thumbKey) : null,
     mimeType: a.mimeType,
     fileSize: a.fileSize,
     tags: a.tags.map((t) => t.name),

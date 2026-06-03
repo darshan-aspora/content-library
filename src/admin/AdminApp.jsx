@@ -33,7 +33,7 @@ export default function AdminApp() {
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/85 backdrop-blur">
         <div className="mx-auto flex w-full max-w-[1400px] items-center gap-4 px-5 py-3 sm:px-8">
           <div className="flex items-center gap-2.5">
-            <Logo className="text-xl" />
+            <Logo className="h-6" />
             <span className="hidden h-5 w-px bg-slate-200 sm:block" />
             <span className="hidden text-sm font-semibold text-slate-700 sm:block">Admin · Content Library</span>
           </div>

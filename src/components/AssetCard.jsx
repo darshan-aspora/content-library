@@ -16,7 +16,7 @@ export default function AssetCard({ asset, onPreview }) {
         title={asset.title}
         className="relative block w-full overflow-hidden rounded-2xl bg-slate-100 ring-1 ring-slate-200/70 transition duration-200 group-hover:-translate-y-0.5 group-hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] group-hover:ring-slate-300"
       >
-        <div className="aspect-[9/16]">
+        <div className="aspect-[402/844]">
           <AssetThumb asset={asset} className="h-full w-full" />
         </div>
 
@@ -27,14 +27,16 @@ export default function AssetCard({ asset, onPreview }) {
               ML
             </span>
           )}
-          {isVideo && (
-            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-black/55 text-white backdrop-blur">
-              <svg viewBox="0 0 20 20" fill="currentColor" className="h-3 w-3">
-                <path d="M6.5 4.5v11l9-5.5-9-5.5Z" />
-              </svg>
-            </span>
-          )}
         </div>
+
+        {/* Centered play button for videos */}
+        {isVideo && (
+          <span className="pointer-events-none absolute left-1/2 top-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-sm transition group-hover:bg-black/60">
+            <svg viewBox="0 0 20 20" fill="currentColor" className="ml-0.5 h-5 w-5">
+              <path d="M6.5 4.5v11l9-5.5-9-5.5Z" />
+            </svg>
+          </span>
+        )}
 
         {/* Hover veil */}
         <div className="absolute inset-0 bg-slate-900/0 transition group-hover:bg-slate-900/[0.04]" />
