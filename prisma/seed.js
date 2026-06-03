@@ -40,12 +40,11 @@ const tree = [
     code: "02",
     name: "App Images & Videos",
     slug: "app-media",
-    note: "High-fidelity screens & recordings",
+    note: "High-fidelity app screens & recordings, organised by file type",
     children: [
-      { name: "Most common journeys", slug: "journeys-common", note: "Success, first purchase, account opening" },
-      { name: "Remittance", slug: "pod-remittance", note: "POD-specific journeys" },
-      { name: "Gold", slug: "pod-gold", note: "POD-specific journeys" },
-      { name: "NRI Banking", slug: "pod-nri", note: "POD-specific journeys" },
+      { name: "Images", slug: "app-images", note: "Screenshots & static screen designs" },
+      { name: "Videos", slug: "app-videos", note: "Screen recordings & motion" },
+      { name: "PDFs", slug: "app-pdfs", note: "Flow docs & exportable guides" },
     ],
   },
   {
@@ -69,12 +68,6 @@ const sampleAssets = [
   { title: "Hooks & taglines that work", slug: "script-general", type: "script", pod: "general", creatorType: "any", description: "Proven opening hooks and taglines to adapt to your voice.", tags: ["hook", "tagline", "caption"] },
   { title: "Sending money home — emotional angle", slug: "script-nonfinance", type: "script", pod: "remittance", creatorType: "non-finance", description: "Story-led script using everyday metaphors — family, festivals.", tags: ["emotional", "family", "remittance"] },
   { title: "Why FX rates matter — logical breakdown", slug: "script-finance", type: "script", pod: "remittance", creatorType: "finance", description: "CA-style explainer comparing mid-market vs bank rates.", tags: ["fx", "rates", "comparison"] },
-  { title: "Account opening — full flow", slug: "journeys-common", type: "video", pod: "general", creatorType: "any", description: "Screen recording of the end-to-end signup and KYC flow.", tags: ["account opening", "kyc", "onboarding"] },
-  { title: "Payment success — confirmation moment", slug: "journeys-common", type: "gif", pod: "general", creatorType: "any", description: "Looping success checkmark animation — punchy ending for reels.", tags: ["success", "confirmation", "loop"] },
-  { title: "First transfer — happy path (Malayalam)", slug: "journeys-common", type: "video", pod: "general", language: "ml", creatorType: "any", description: "Malayalam UI walkthrough of a first money transfer, for UAE.", tags: ["first purchase", "transfer", "malayalam"] },
-  { title: "Remittance — money delivered", slug: "pod-remittance", type: "video", pod: "remittance", creatorType: "any", description: "Recording from initiation to 'delivered' status with timeline.", tags: ["remittance", "delivered", "timeline"] },
-  { title: "Gold — buy 24K in seconds", slug: "pod-gold", type: "video", pod: "gold", creatorType: "any", description: "Screen recording of a digital gold purchase and holdings update.", tags: ["gold", "buy", "24k"] },
-  { title: "NRI Banking — account dashboard", slug: "pod-nri", type: "image", pod: "nri", creatorType: "any", description: "Dashboard view of NRI account balances and quick actions.", tags: ["nri", "banking", "dashboard"] },
   { title: "Canva reel template — savings story", slug: "gfx-templates", type: "template", pod: "remittance", platform: "instagram", creatorType: "any", description: "Editable Canva template for a 3-slide savings story.", tags: ["canva", "template", "reel"] },
   { title: "IG story badge — Trustpilot 4.6", slug: "gfx-insta", type: "graphic", pod: "general", platform: "instagram", creatorType: "any", description: "Animated Trustpilot 4.6 (UK) badge in brand colors, story-sized.", tags: ["trustpilot", "badge", "social proof"] },
   { title: "X post card — rate comparison", slug: "gfx-x", type: "graphic", pod: "remittance", platform: "x", creatorType: "finance", description: "16:9 graphic comparing Aspora vs Wise/Revolut on fees.", tags: ["comparison", "wise", "revolut"] },
@@ -102,37 +95,6 @@ const moreAssets = [
   { title: "Tax on remittances FAQ", slug: "script-finance", type: "script", pod: "remittance", creatorType: "finance", description: "Common tax questions on inbound/outbound transfers.", tags: ["tax", "remittance", "faq"] },
   { title: "SIP vs digital gold comparison", slug: "script-finance", type: "script", pod: "gold", creatorType: "finance", description: "Side-by-side logic for recurring gold vs mutual-fund SIP.", tags: ["sip", "gold", "comparison"] },
   { title: "Forex spread math, simplified", slug: "script-finance", type: "script", pod: "remittance", creatorType: "finance", description: "How spreads quietly cost you, with a worked example.", tags: ["forex", "spread", "math"] },
-
-  // 02 — Most common journeys
-  { title: "Splash to home screen", slug: "journeys-common", type: "video", pod: "general", creatorType: "any", description: "Clean open of the app landing on the home dashboard.", tags: ["home", "launch", "screen"] },
-  { title: "KYC document upload step", slug: "journeys-common", type: "video", pod: "general", creatorType: "any", description: "Recording of the ID upload and verification step.", tags: ["kyc", "verification", "upload"] },
-  { title: "Add a new recipient", slug: "journeys-common", type: "video", pod: "general", creatorType: "any", description: "Flow for adding a beneficiary before a transfer.", tags: ["recipient", "beneficiary", "flow"] },
-  { title: "Transaction history view", slug: "journeys-common", type: "image", pod: "general", creatorType: "any", description: "Screenshot of a clean, itemised transaction history.", tags: ["history", "transactions", "screen"] },
-  { title: "Notification: money received", slug: "journeys-common", type: "gif", pod: "general", creatorType: "any", description: "Push notification animation for an incoming transfer.", tags: ["notification", "received", "animation"] },
-  { title: "Profile & security settings", slug: "journeys-common", type: "image", pod: "general", creatorType: "any", description: "Security settings screen — 2FA, biometrics, devices.", tags: ["security", "settings", "profile"] },
-
-  // 02 — Remittance
-  { title: "Remittance: choose payout method", slug: "pod-remittance", type: "image", pod: "remittance", creatorType: "any", description: "Bank, UPI, or cash pickup selection screen.", tags: ["payout", "method", "remittance"] },
-  { title: "Remittance: fee breakdown screen", slug: "pod-remittance", type: "image", pod: "remittance", creatorType: "finance", description: "Transparent fee + rate breakdown before confirm.", tags: ["fees", "breakdown", "transparency"] },
-  { title: "Remittance: live rate ticker", slug: "pod-remittance", type: "gif", pod: "remittance", creatorType: "any", description: "Animated live FX rate updating in real time.", tags: ["rate", "live", "ticker"] },
-  { title: "Remittance: recurring transfer setup", slug: "pod-remittance", type: "video", pod: "remittance", creatorType: "any", description: "Setting up an automatic monthly transfer home.", tags: ["recurring", "automation", "transfer"] },
-  { title: "Remittance: cash pickup option", slug: "pod-remittance", type: "image", pod: "remittance", language: "ml", creatorType: "any", description: "Cash pickup selection, Malayalam UI for UAE corridor.", tags: ["cash pickup", "malayalam", "uae"] },
-  { title: "Remittance: referral reward", slug: "pod-remittance", type: "graphic", pod: "remittance", creatorType: "any", description: "Refer-a-friend reward visual for transfers.", tags: ["referral", "reward", "growth"] },
-
-  // 02 — Gold
-  { title: "Gold: live price chart", slug: "pod-gold", type: "image", pod: "gold", creatorType: "finance", description: "Screenshot of the 24K live price chart with ranges.", tags: ["gold", "price", "chart"] },
-  { title: "Gold: SIP setup", slug: "pod-gold", type: "video", pod: "gold", creatorType: "finance", description: "Setting up a recurring daily/weekly gold buy.", tags: ["gold", "sip", "recurring"] },
-  { title: "Gold: sell & redeem", slug: "pod-gold", type: "video", pod: "gold", creatorType: "any", description: "Selling digital gold and instant payout flow.", tags: ["gold", "sell", "redeem"] },
-  { title: "Gold: vault storage explainer", slug: "pod-gold", type: "video", pod: "gold", creatorType: "any", description: "How insured vault storage works, on-screen.", tags: ["gold", "vault", "storage"] },
-  { title: "Gold: gifting gold", slug: "pod-gold", type: "graphic", pod: "gold", creatorType: "non-finance", description: "Gift digital gold visual for festive moments.", tags: ["gold", "gift", "festival"] },
-  { title: "Gold: purity certificate", slug: "pod-gold", type: "image", pod: "gold", creatorType: "any", description: "24K purity certificate screen for trust building.", tags: ["gold", "purity", "certificate"] },
-
-  // 02 — NRI Banking
-  { title: "NRI: fixed deposit booking", slug: "pod-nri", type: "video", pod: "nri", creatorType: "finance", description: "Booking an NRI fixed deposit, end to end.", tags: ["nri", "fd", "deposit"] },
-  { title: "NRI: NRE account funding", slug: "pod-nri", type: "image", pod: "nri", creatorType: "any", description: "Funding an NRE account from abroad — screen.", tags: ["nri", "nre", "funding"] },
-  { title: "NRI: repatriation flow", slug: "pod-nri", type: "video", pod: "nri", creatorType: "finance", description: "Repatriating funds out of India, step by step.", tags: ["nri", "repatriation", "flow"] },
-  { title: "NRI: debit card management", slug: "pod-nri", type: "image", pod: "nri", creatorType: "any", description: "Freeze, limits and controls on the NRI card.", tags: ["nri", "card", "controls"] },
-  { title: "NRI: bill payments in India", slug: "pod-nri", type: "video", pod: "nri", creatorType: "any", description: "Paying India utility bills from an NRI account.", tags: ["nri", "bills", "payments"] },
 
   // 03 — Templates
   { title: "Canva story template — rate alert", slug: "gfx-templates", type: "template", pod: "remittance", platform: "instagram", creatorType: "any", description: "Editable story template announcing a great rate.", tags: ["canva", "story", "rate"] },
@@ -162,6 +124,38 @@ const moreAssets = [
   { title: "Customer testimonial reel", slug: "gfx-trust", type: "video", pod: "general", creatorType: "non-finance", description: "Short reel stitching real customer quotes.", tags: ["testimonial", "reel", "social proof"] },
 ];
 
+// 02 — App Images & Videos. Real app screens from the Gold + Leasing flows.
+// These are static UI designs, so they live under the "Images" subfolder
+// (slug app-images); the section/feature lives in tags for filtering. Videos
+// and PDFs subfolders start empty and fill as that content arrives.
+const appScreens = [
+  // Gold — Landing Page
+  { title: "Gold — Landing page header", slug: "app-images", type: "image", pod: "gold", description: "Invest in 24K gold — landing hero with key benefits (free storage & insurance, 0% VAT, withdraw anytime).", tags: ["gold", "landing-page", "invest", "screen"] },
+  { title: "Gold — Comparison across asset classes", slug: "app-images", type: "image", pod: "gold", description: "Past-returns calculator comparing gold vs fixed deposit vs cash over 6M–5Y.", tags: ["gold", "landing-page", "comparison", "returns", "screen"] },
+
+  // Gold — Vault + Portfolio
+  { title: "Gold — Vault", slug: "app-images", type: "image", pod: "gold", description: "Vault view showing total gold holdings in grams with current value and change.", tags: ["gold", "vault", "holdings", "screen"] },
+  { title: "Gold — Portfolio breakdown", slug: "app-images", type: "image", pod: "gold", description: "Portfolio breakdown: invested amount, average buy price, net returns and value chart.", tags: ["gold", "portfolio", "breakdown", "screen"] },
+
+  // Gold — Buy
+  { title: "Buy Gold — First time", slug: "app-images", type: "image", pod: "gold", description: "First-time buy flow: enter amount in AED with quick-amount chips and gram conversion.", tags: ["gold", "buy", "amount-entry", "screen"] },
+  { title: "Buy Gold — Confirming payment", slug: "app-images", type: "image", pod: "gold", description: "Payment confirmation state while the gold purchase is securely processed.", tags: ["gold", "buy", "payment", "confirmation", "screen"] },
+  { title: "Buy Gold — Ownership certificate", slug: "app-images", type: "image", pod: "gold", description: "Certificate of gold ownership added to the user's vault (24K, 99.99% purity).", tags: ["gold", "buy", "certificate", "screen"] },
+
+  // Gold — Sell
+  { title: "Sell Gold — First time", slug: "app-images", type: "image", pod: "gold", description: "First-time sell flow: enter amount with quick-percentage chips and gram conversion.", tags: ["gold", "sell", "amount-entry", "screen"] },
+  { title: "Sell Gold — Initiating sale", slug: "app-images", type: "image", pod: "gold", description: "Transition state while the gold sell is being initiated and funds are on the way.", tags: ["gold", "sell", "confirmation", "screen"] },
+  { title: "Sell Gold — Sold successfully", slug: "app-images", type: "image", pod: "gold", description: "Sale success summary: gold sold, fees, net payout and payout timeline.", tags: ["gold", "sell", "success", "screen"] },
+
+  // Gold — Leasing
+  { title: "Gold Leasing — Landing page", slug: "app-images", type: "image", pod: "gold", description: "Leasing intro: earn an extra 3% per year by leasing your gold, with projected returns.", tags: ["gold", "leasing", "landing-page", "earn", "screen"] },
+  { title: "Gold Leasing — Leased confirmation", slug: "app-images", type: "image", pod: "gold", description: "Confirmation that gold is now actively leased, with accrual, payout cadence and start date.", tags: ["gold", "leasing", "confirmation", "screen"] },
+  { title: "Gold Leasing — Leased vault", slug: "app-images", type: "image", pod: "gold", description: "Vault view with active leased gold highlighted alongside invested value.", tags: ["gold", "leasing", "vault", "screen"] },
+  { title: "Gold Leasing — Leased portfolio breakdown", slug: "app-images", type: "image", pod: "gold", description: "Leased portfolio breakdown: returns at 3% p.a., total earned and amount invested.", tags: ["gold", "leasing", "portfolio", "breakdown", "screen"] },
+  { title: "Gold Leasing — Leased portfolio", slug: "app-images", type: "image", pod: "gold", description: "Active leased gold summary with total gold earned and next payout date.", tags: ["gold", "leasing", "portfolio", "screen"] },
+  { title: "Gold Leasing — Monthly payout", slug: "app-images", type: "image", pod: "gold", description: "Monthly payout transaction detail: gram payout, period covered and payout breakdown.", tags: ["gold", "leasing", "payout", "screen"] },
+];
+
 async function main() {
   console.log("Seeding…");
 
@@ -187,7 +181,7 @@ async function main() {
     }
   }
 
-  for (const a of [...sampleAssets, ...moreAssets]) {
+  for (const a of [...sampleAssets, ...moreAssets, ...appScreens]) {
     const categoryId = slugToId[a.slug];
     if (!categoryId) continue;
     const exists = await prisma.asset.findFirst({ where: { title: a.title } });
