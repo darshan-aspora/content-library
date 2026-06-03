@@ -70,7 +70,7 @@ router.post("/", requireAdmin, upload.single("file"), async (req, res) => {
 
   let fileFields = {};
   if (req.file) {
-    const key = await storage.save(req.file.buffer, req.file.originalname);
+    const key = await storage.save(req.file.buffer, req.file.originalname, req.file.mimetype);
     fileFields = {
       fileKey: key,
       fileName: req.file.originalname,
@@ -116,7 +116,7 @@ router.patch("/:id", requireAdmin, upload.single("file"), async (req, res) => {
 
   if (req.file) {
     await storage.remove(existing.fileKey);
-    const key = await storage.save(req.file.buffer, req.file.originalname);
+    const key = await storage.save(req.file.buffer, req.file.originalname, req.file.mimetype);
     data.fileKey = key;
     data.fileName = req.file.originalname;
     data.mimeType = req.file.mimetype;

@@ -1,14 +1,17 @@
-// Scalable-by-design: SQLite locally; switch `provider` to "postgresql" for Vercel
-// without touching the models. Facets are indexed scalar columns; tags are a proper
-// many-to-many; categories form a self-referential tree (pillars -> subfolders).
+// Postgres (Supabase) in all environments. Facets are indexed scalar columns; tags
+// are a proper many-to-many; categories form a self-referential tree (pillars ->
+// subfolders). DATABASE_URL is the pooled URL; DIRECT_URL is used for migrations.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  // Pooled connection (Supabase Supavisor, port 6543) for the serverless app.
+  url       = env("DATABASE_URL")
+  // Direct connection (port 5432) used by `prisma db push` / migrations.
+  directUrl = env("DIRECT_URL")
 }
 
 model Category {
