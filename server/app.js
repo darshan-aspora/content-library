@@ -24,7 +24,7 @@ if (!usingSupabase) {
   app.use("/uploads", express.static(UPLOADS_DIR, { maxAge: "1h" }));
 }
 
-app.get("/api/health", (req, res) => res.json({ ok: true }));
+app.get("/api/health", (req, res) => res.json({ ok: true, build: "routes-v1" }));
 app.use("/api/auth", authRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/assets", assetRoutes);
