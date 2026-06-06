@@ -27,7 +27,7 @@ export default function LoginPage() {
         onSubmit={submit}
         className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-7 shadow-sm"
       >
-        <Logo className="h-7" />
+        <Logo className="h-6" />
         <h1 className="mt-4 text-lg font-semibold text-slate-900">Sign in</h1>
         <p className="mb-5 text-[13px] text-slate-500">Access the Aspora content library.</p>
 

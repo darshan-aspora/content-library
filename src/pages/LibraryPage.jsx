@@ -90,53 +90,62 @@ export default function LibraryPage() {
   return (
     <div className="min-h-full bg-white">
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/85 backdrop-blur">
-        {/* Row 1: brand + search + account */}
+        {/* Row 1: brand (left) · search + request (centered group) · account (right) */}
         <div className={`mx-auto flex w-full max-w-[1400px] items-center gap-4 px-5 transition-all sm:px-8 ${scrolled ? "py-2" : "py-3"}`}>
-          <Link to="/" className="flex items-center gap-2.5" onClick={() => setProduct("all")}>
-            <Logo className="h-7" />
-            <span className="hidden h-5 w-px bg-slate-200 sm:block" />
-            <span className="hidden text-sm font-semibold text-slate-700 sm:block">Content Library</span>
-          </Link>
-
-          <div className="relative ml-auto w-full max-w-md">
-            <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">⌕</span>
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search assets, tags…"
-              className="w-full rounded-full border border-slate-200 bg-slate-50 py-2 pl-9 pr-9 text-sm outline-none transition focus:border-brand focus:bg-white focus:ring-2 focus:ring-brand/15"
-            />
-            {query && (
-              <button
-                onClick={() => setQuery("")}
-                aria-label="Clear search"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-              >
-                ×
-              </button>
-            )}
+          {/* Left zone */}
+          <div className="flex min-w-0 flex-1 items-center">
+            <Link to="/" className="flex items-center gap-2.5" onClick={() => setProduct("all")}>
+              <Logo className="h-6" />
+              <span className="hidden h-5 w-px bg-slate-200 sm:block" />
+              <span className="hidden text-sm font-semibold text-slate-700 sm:block">Content Library</span>
+            </Link>
           </div>
 
-          <button
-            onClick={() => openRequest("")}
-            className="shrink-0 rounded-full bg-brand px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-brand/90"
-          >
-            Request
-          </button>
-          {isAdmin && (
-            <Link
-              to="/admin"
-              className="hidden shrink-0 rounded-full border border-slate-200 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 sm:block"
+          {/* Center group: search + request */}
+          <div className="flex shrink-0 items-center gap-3">
+            <div className="relative w-44 sm:w-[24rem]">
+              <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">⌕</span>
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search assets, tags…"
+                className="w-full rounded-full border border-slate-200 bg-slate-50 py-2 pl-9 pr-9 text-sm outline-none transition focus:border-brand focus:bg-white focus:ring-2 focus:ring-brand/15"
+              />
+              {query && (
+                <button
+                  onClick={() => setQuery("")}
+                  aria-label="Clear search"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                >
+                  ×
+                </button>
+              )}
+            </div>
+            <button
+              onClick={() => openRequest("")}
+              className="shrink-0 rounded-full bg-brand px-3.5 py-2 text-[13px] font-semibold text-white transition hover:bg-brand/90"
             >
-              Admin
-            </Link>
-          )}
-          <button
-            onClick={logout}
-            className="hidden shrink-0 rounded-full px-3 py-2 text-[13px] font-medium text-slate-500 hover:bg-slate-100 sm:block"
-          >
-            Sign out
-          </button>
+              Request
+            </button>
+          </div>
+
+          {/* Right zone */}
+          <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="hidden shrink-0 rounded-full border border-slate-200 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 sm:block"
+              >
+                Admin
+              </Link>
+            )}
+            <button
+              onClick={logout}
+              className="hidden shrink-0 rounded-full px-3 py-2 text-[13px] font-medium text-slate-500 hover:bg-slate-100 sm:block"
+            >
+              Sign out
+            </button>
+          </div>
         </div>
 
         {/* Row 2: product tabs + filters */}

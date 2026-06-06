@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import crypto from "node:crypto";
+import { remittanceScreens } from "./data/remittance-screens.js";
 
 const prisma = new PrismaClient();
 
@@ -62,66 +63,15 @@ const tree = [
   },
 ];
 
-// A few metadata-only sample assets (no file yet) so the library isn't empty.
-const sampleAssets = [
-  { title: "Campaign Guidelines", slug: "start-here", type: "pdf", pod: "general", creatorType: "any", description: "Short overview of Aspora, brand dos & don'ts, and posting guidelines. Read first.", tags: ["guidelines", "brand", "onboarding"] },
-  { title: "Hooks & taglines that work", slug: "script-general", type: "script", pod: "general", creatorType: "any", description: "Proven opening hooks and taglines to adapt to your voice.", tags: ["hook", "tagline", "caption"] },
-  { title: "Sending money home — emotional angle", slug: "script-nonfinance", type: "script", pod: "remittance", creatorType: "non-finance", description: "Story-led script using everyday metaphors — family, festivals.", tags: ["emotional", "family", "remittance"] },
-  { title: "Why FX rates matter — logical breakdown", slug: "script-finance", type: "script", pod: "remittance", creatorType: "finance", description: "CA-style explainer comparing mid-market vs bank rates.", tags: ["fx", "rates", "comparison"] },
-  { title: "Canva reel template — savings story", slug: "gfx-templates", type: "template", pod: "remittance", platform: "instagram", creatorType: "any", description: "Editable Canva template for a 3-slide savings story.", tags: ["canva", "template", "reel"] },
-  { title: "IG story badge — Trustpilot 4.6", slug: "gfx-insta", type: "graphic", pod: "general", platform: "instagram", creatorType: "any", description: "Animated Trustpilot 4.6 (UK) badge in brand colors, story-sized.", tags: ["trustpilot", "badge", "social proof"] },
-  { title: "X post card — rate comparison", slug: "gfx-x", type: "graphic", pod: "remittance", platform: "x", creatorType: "finance", description: "16:9 graphic comparing Aspora vs Wise/Revolut on fees.", tags: ["comparison", "wise", "revolut"] },
-  { title: "1M+ downloads visual", slug: "gfx-trust", type: "graphic", pod: "general", creatorType: "any", description: "Bold milestone graphic — '1M+ downloads' in brand colors.", tags: ["trust", "downloads", "milestone"] },
-];
-
-// ~54 additional assets spread across every category for a fuller library.
-const moreAssets = [
-  // 01 — General idea
-  { title: "Reel structure: hook → value → CTA", slug: "script-general", type: "script", pod: "general", creatorType: "any", description: "A repeatable 3-beat reel skeleton you can drop any topic into.", tags: ["reel", "structure", "hook", "cta"] },
-  { title: "Caption formulas that convert", slug: "script-general", type: "script", pod: "general", creatorType: "any", description: "Fill-in-the-blank caption templates with strong openers.", tags: ["caption", "formula", "copy"] },
-  { title: "Trending audio pairing ideas", slug: "script-general", type: "script", pod: "general", creatorType: "non-finance", description: "How to map trending sounds to finance topics without feeling forced.", tags: ["audio", "trending", "reel"] },
-  { title: "Story arc for finance content", slug: "script-general", type: "script", pod: "general", creatorType: "finance", description: "Problem → tension → resolution arc tuned for money topics.", tags: ["story", "arc", "structure"] },
-
-  // 01 — Non-finance focused
-  { title: "Diwali gifting money story", slug: "script-nonfinance", type: "script", pod: "remittance", creatorType: "non-finance", description: "Festival-led emotional script about sending gifts home.", tags: ["diwali", "festival", "emotional"] },
-  { title: "Mom's first smartphone transfer", slug: "script-nonfinance", type: "script", pod: "remittance", language: "ml", creatorType: "non-finance", description: "Warm Malayalam-friendly story about teaching a parent to receive money.", tags: ["family", "malayalam", "emotional"] },
-  { title: "Festival remittance metaphor pack", slug: "script-nonfinance", type: "script", pod: "remittance", creatorType: "non-finance", description: "A set of easy metaphors for explaining transfers warmly.", tags: ["metaphor", "remittance", "emotional"] },
-  { title: "Studying abroad: staying connected", slug: "script-nonfinance", type: "script", pod: "general", creatorType: "non-finance", description: "Student-life angle on supporting family across borders.", tags: ["student", "abroad", "family"] },
+// Gold authored content (scripts + templates). The `general` and `nri` pods are
+// intentionally left empty: `general` will be repopulated with brand assets
+// (logos/icons) and `nri` stays blank until those screens are ready. The header
+// tabs still render for empty pods, so both stay visible in the library.
+const goldExtras = [
   { title: "Wedding savings narrative", slug: "script-nonfinance", type: "script", pod: "gold", creatorType: "non-finance", description: "Saving in gold for a wedding — emotional, aspirational framing.", tags: ["wedding", "gold", "savings"] },
-
-  // 01 — Finance focused
   { title: "Compounding explained with chai", slug: "script-finance", type: "script", pod: "gold", creatorType: "finance", description: "Everyday analogy script for compounding returns.", tags: ["compounding", "explainer", "analogy"] },
-  { title: "NRE vs NRO accounts breakdown", slug: "script-finance", type: "script", pod: "nri", creatorType: "finance", description: "Clear comparison of NRE and NRO with use-cases.", tags: ["nre", "nro", "comparison"] },
-  { title: "Tax on remittances FAQ", slug: "script-finance", type: "script", pod: "remittance", creatorType: "finance", description: "Common tax questions on inbound/outbound transfers.", tags: ["tax", "remittance", "faq"] },
   { title: "SIP vs digital gold comparison", slug: "script-finance", type: "script", pod: "gold", creatorType: "finance", description: "Side-by-side logic for recurring gold vs mutual-fund SIP.", tags: ["sip", "gold", "comparison"] },
-  { title: "Forex spread math, simplified", slug: "script-finance", type: "script", pod: "remittance", creatorType: "finance", description: "How spreads quietly cost you, with a worked example.", tags: ["forex", "spread", "math"] },
-
-  // 03 — Templates
-  { title: "Canva story template — rate alert", slug: "gfx-templates", type: "template", pod: "remittance", platform: "instagram", creatorType: "any", description: "Editable story template announcing a great rate.", tags: ["canva", "story", "rate"] },
   { title: "Canva post — gold milestone", slug: "gfx-templates", type: "template", pod: "gold", platform: "instagram", creatorType: "any", description: "Square post celebrating a gold savings milestone.", tags: ["canva", "post", "gold"] },
-  { title: "CapCut reel template — remittance", slug: "gfx-templates", type: "template", pod: "remittance", creatorType: "any", description: "CapCut project for a fast remittance explainer reel.", tags: ["capcut", "reel", "template"] },
-  { title: "YouTube thumbnail template pack", slug: "gfx-templates", type: "template", pod: "general", platform: "youtube", creatorType: "any", description: "Editable high-CTR thumbnail layouts.", tags: ["thumbnail", "pack", "template"] },
-
-  // 03 — Instagram
-  { title: "IG reel cover — savings", slug: "gfx-insta", type: "graphic", pod: "remittance", platform: "instagram", creatorType: "any", description: "On-brand reel cover for savings content.", tags: ["reel cover", "savings", "instagram"] },
-  { title: "IG carousel frame set", slug: "gfx-insta", type: "graphic", pod: "general", platform: "instagram", creatorType: "any", description: "Matched carousel frames (intro/body/CTA).", tags: ["carousel", "frames", "instagram"] },
-  { title: "IG story poll sticker pack", slug: "gfx-insta", type: "graphic", pod: "general", platform: "instagram", creatorType: "any", description: "Branded poll/question sticker overlays.", tags: ["story", "stickers", "engagement"] },
-
-  // 03 — X (Twitter)
-  { title: "X header — brand", slug: "gfx-x", type: "graphic", pod: "general", platform: "x", creatorType: "any", description: "Profile header sized for X, brand colors.", tags: ["header", "profile", "brand"] },
-  { title: "X thread divider cards", slug: "gfx-x", type: "graphic", pod: "general", platform: "x", creatorType: "finance", description: "Numbered divider cards to structure a thread.", tags: ["thread", "divider", "cards"] },
-
-  // 03 — YouTube
-  { title: "YT end screen template", slug: "gfx-youtube", type: "graphic", pod: "general", platform: "youtube", creatorType: "any", description: "Subscribe + next-video end screen layout.", tags: ["end screen", "subscribe", "youtube"] },
-  { title: "YT lower-third pack", slug: "gfx-youtube", type: "graphic", pod: "general", platform: "youtube", creatorType: "any", description: "Name/title lower-thirds in brand style.", tags: ["lower third", "overlay", "youtube"] },
-  { title: "YT community post graphic", slug: "gfx-youtube", type: "graphic", pod: "general", platform: "youtube", creatorType: "any", description: "Community-tab announcement graphic.", tags: ["community", "post", "youtube"] },
-
-  // 03 — Trust markers
-  { title: "Trustpilot 4.6 animated badge", slug: "gfx-trust", type: "graphic", pod: "general", creatorType: "any", description: "Animated 4.6 (UK) Trustpilot badge for stories.", tags: ["trustpilot", "badge", "animated"] },
-  { title: "App Store rating card", slug: "gfx-trust", type: "graphic", pod: "general", creatorType: "any", description: "App Store star-rating card in brand colors.", tags: ["app store", "rating", "social proof"] },
-  { title: "Google Play 4.7 badge", slug: "gfx-trust", type: "graphic", pod: "general", creatorType: "any", description: "Play Store rating badge for posts and stories.", tags: ["google play", "rating", "badge"] },
-  { title: "Featured-in press logos", slug: "gfx-trust", type: "graphic", pod: "general", creatorType: "any", description: "Press/feature logo strip for credibility.", tags: ["press", "logos", "credibility"] },
-  { title: "Customer testimonial reel", slug: "gfx-trust", type: "video", pod: "general", creatorType: "non-finance", description: "Short reel stitching real customer quotes.", tags: ["testimonial", "reel", "social proof"] },
 ];
 
 // 02 — App Images & Videos. Real app screens from the Gold + Leasing flows.
@@ -181,7 +131,7 @@ async function main() {
     }
   }
 
-  for (const a of [...sampleAssets, ...moreAssets, ...appScreens]) {
+  for (const a of [...goldExtras, ...appScreens, ...remittanceScreens]) {
     const categoryId = slugToId[a.slug];
     if (!categoryId) continue;
     const exists = await prisma.asset.findFirst({ where: { title: a.title } });

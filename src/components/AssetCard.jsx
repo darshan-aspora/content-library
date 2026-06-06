@@ -38,8 +38,9 @@ export default function AssetCard({ asset, onPreview }) {
           </span>
         )}
 
-        {/* Hover veil */}
-        <div className="absolute inset-0 bg-slate-900/0 transition group-hover:bg-slate-900/[0.04]" />
+        {/* Hover veil — must not capture pointer events, or the video's
+            hover-to-play (onMouseEnter on the <video>) never fires. */}
+        <div className="pointer-events-none absolute inset-0 bg-slate-900/0 transition group-hover:bg-slate-900/[0.04]" />
       </button>
 
       <div className="mt-2.5 px-0.5">
