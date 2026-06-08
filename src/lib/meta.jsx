@@ -17,7 +17,7 @@ export const productMeta = {
   gold: { label: "Gold", accent: "#d9a441" },
   remittance: { label: "Remittance", accent: "#0b5cff" },
   nri: { label: "NRI Banking", accent: "#10b981" },
-  general: { label: "General", accent: "#64748b" },
+  general: { label: "Brand Kit", accent: "#64748b" },
 };
 
 // Tab order for the header. `all` is synthetic (no pod filter).
@@ -26,12 +26,47 @@ export const PRODUCTS = [
   { id: "gold", label: "Gold" },
   { id: "remittance", label: "Remittance" },
   { id: "nri", label: "NRI Banking" },
-  { id: "general", label: "General" },
+  { id: "general", label: "Brand Kit" },
 ];
+
+// Sub-categories ("sections") shown as chips under each product tab. Keyed by
+// pod; `id` matches the Asset.section value, `label` is the chip text. Kept in
+// sync with prisma/data/sections.js (the seed/backfill side).
+export const sectionsByPod = {
+  gold: [
+    { id: "explore", label: "Explore" },
+    { id: "buy", label: "Buy" },
+    { id: "sell", label: "Sell" },
+    { id: "leasing", label: "Leasing" },
+  ],
+  remittance: [
+    { id: "add-recipient", label: "Add recipient" },
+    { id: "send-money", label: "Send money" },
+  ],
+  general: [
+    { id: "logo", label: "Logo" },
+    { id: "favicon", label: "Favicon" },
+    { id: "icon", label: "Icon" },
+  ],
+  nri: [
+    { id: "pre-journey", label: "Pre-journey" },
+    { id: "the-journey", label: "The Journey" },
+    { id: "kyc", label: "KYC" },
+    { id: "tax", label: "Tax" },
+    { id: "nominee", label: "Nominee" },
+    { id: "review-confirm", label: "Review & Confirm" },
+    { id: "account-home", label: "Account & Switching" },
+    { id: "account-details", label: "Account Details" },
+    { id: "adding-money", label: "Adding Money" },
+    { id: "sending-money", label: "Sending Money" },
+    { id: "statement", label: "Statement" },
+    { id: "mpin", label: "MPIN" },
+  ],
+};
 
 export const facets = {
   pod: [
-    { id: "general", label: "General" },
+    { id: "general", label: "Brand Kit" },
     { id: "remittance", label: "Remittance" },
     { id: "gold", label: "Gold" },
     { id: "nri", label: "NRI Banking" },

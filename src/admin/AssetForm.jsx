@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { api } from "../lib/api";
-import { facets, buildTree } from "../lib/meta";
+import { facets, buildTree, sectionsByPod } from "../lib/meta";
 
 const field = "w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/15";
 const lbl = "mb-1 block text-[12px] font-medium text-slate-600";
@@ -23,6 +23,7 @@ export default function AssetForm({ categories, initial, onSaved, onCancel }) {
     description: initial?.description ?? "",
     categoryId: initial?.categoryId ?? opts[0]?.id ?? "",
     pod: initial?.pod ?? "general",
+    section: initial?.section ?? "",
     platform: initial?.platform ?? "all",
     language: initial?.language ?? "en",
     creatorType: initial?.creatorType ?? "any",
@@ -78,8 +79,21 @@ export default function AssetForm({ categories, initial, onSaved, onCancel }) {
         </div>
         <div>
           <label className={lbl}>Product (POD)</label>
-          <select className={field} value={form.pod} onChange={set("pod")}>
+          <select
+            className={field}
+            value={form.pod}
+            onChange={(e) => setForm((f) => ({ ...f, pod: e.target.value, section: "" }))}
+          >
             {facets.pod.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className={lbl}>Sub-category</label>
+          <select className={field} value={form.section} onChange={set("section")}>
+            <option value="">— None —</option>
+            {(sectionsByPod[form.pod] ?? []).map((o) => (
+              <option key={o.id} value={o.id}>{o.label}</option>
+            ))}
           </select>
         </div>
         <div>

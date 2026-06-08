@@ -36,6 +36,7 @@ function dto(a) {
     description: a.description,
     type: a.type,
     pod: a.pod,
+    section: a.section,
     platform: a.platform,
     language: a.language,
     creatorType: a.creatorType,
@@ -86,6 +87,7 @@ router.post("/", requireAdmin, upload.single("file"), async (req, res) => {
       description: b.description?.trim() || null,
       type: typeFromMime(req.file?.mimetype, b.type),
       pod: b.pod || "general",
+      section: b.section?.trim() || "",
       platform: b.platform || "all",
       language: b.language || "en",
       creatorType: b.creatorType || "any",
@@ -107,6 +109,7 @@ router.patch("/:id", requireAdmin, upload.single("file"), async (req, res) => {
   if (b.title !== undefined) data.title = String(b.title).trim();
   if (b.description !== undefined) data.description = b.description?.trim() || null;
   if (b.pod !== undefined) data.pod = b.pod;
+  if (b.section !== undefined) data.section = b.section?.trim() || "";
   if (b.platform !== undefined) data.platform = b.platform;
   if (b.language !== undefined) data.language = b.language;
   if (b.creatorType !== undefined) data.creatorType = b.creatorType;

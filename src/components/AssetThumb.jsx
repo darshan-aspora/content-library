@@ -17,7 +17,7 @@ export default function AssetThumb({ asset, className = "" }) {
 
   if (isImage) {
     return (
-      <div className={`relative overflow-hidden bg-white ${className}`}>
+      <div className={`relative overflow-hidden bg-[#F4F4F4] ${className}`}>
         <img
           src={asset.fileUrl}
           alt={asset.title}
@@ -38,7 +38,7 @@ export default function AssetThumb({ asset, className = "" }) {
       }
     };
     return (
-      <div className={`relative overflow-hidden bg-white ${className}`}>
+      <div className={`relative overflow-hidden bg-[#F4F4F4] ${className}`}>
         <video
           ref={videoRef}
           // #t=0.1 nudges the browser to render an actual frame, not a black poster.

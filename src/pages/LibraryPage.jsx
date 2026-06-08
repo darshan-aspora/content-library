@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../lib/api";
 import { useAuth } from "../lib/auth";
-import { PRODUCTS, productMeta } from "../lib/meta";
+import { PRODUCTS, productMeta, sectionsByPod } from "../lib/meta";
 import FilterMenu from "../components/FilterMenu";
 import Logo from "../components/Logo";
 import AssetCard from "../components/AssetCard";
@@ -19,6 +19,7 @@ export default function LibraryPage() {
   const [error, setError] = useState("");
 
   const [product, setProduct] = useState("all"); // pod tab
+  const [section, setSection] = useState(""); // sub-category chip ("" = all)
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState({});
   const [preview, setPreview] = useState(null);
@@ -46,6 +47,9 @@ export default function LibraryPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Switching product tabs clears the active sub-category.
+  useEffect(() => setSection(""), [product]);
+
   const toggle = (facet, value) =>
     setSelected((prev) => {
       const next = { ...prev };
@@ -60,6 +64,7 @@ export default function LibraryPage() {
   const q = query.trim().toLowerCase();
 
   const inProduct = (a) => product === "all" || a.pod === product;
+  const inSection = (a) => !section || a.section === section;
   const passesFilters = (a) => {
     for (const f of BAR_FACETS) {
       const set = selected[f];
@@ -73,11 +78,20 @@ export default function LibraryPage() {
   };
 
   const visible = useMemo(
-    () => assets.filter((a) => inProduct(a) && passesFilters(a)),
-    [assets, product, q, selected]
+    () => assets.filter((a) => inProduct(a) && inSection(a) && passesFilters(a)),
+    [assets, product, section, q, selected]
   );
 
   const productCount = (pid) => assets.filter((a) => pid === "all" || a.pod === pid).length;
+
+  // Sub-category chips for the active product tab (hidden on "All"). Counts
+  // respect the active search/filters but ignore the section selection itself.
+  const sections = product === "all" ? [] : sectionsByPod[product] ?? [];
+  const podScoped = useMemo(
+    () => assets.filter((a) => inProduct(a) && passesFilters(a)),
+    [assets, product, q, selected]
+  );
+  const sectionCount = (sid) => podScoped.filter((a) => a.section === sid).length;
 
   // Lightbox navigation within the visible grid.
   const previewIndex = preview ? visible.findIndex((a) => a.id === preview.id) : -1;
@@ -179,6 +193,46 @@ export default function LibraryPage() {
       </header>
 
       <main className="mx-auto w-full max-w-[1400px] px-5 py-6 sm:px-8">
+        {sections.length > 0 && (
+          <div className="mb-5 flex flex-wrap items-center gap-2">
+            {(() => {
+              const accent = productMeta[product]?.accent;
+              const allOn = section === "";
+              return (
+                <button
+                  onClick={() => setSection("")}
+                  className={`shrink-0 rounded-full px-3 py-1.5 text-[13px] font-medium transition ${
+                    allOn ? "text-white" : "border border-slate-200 text-slate-600 hover:bg-slate-100"
+                  }`}
+                  style={allOn ? { backgroundColor: accent || "#0f172a" } : undefined}
+                >
+                  All
+                </button>
+              );
+            })()}
+            {sections.map((s) => {
+              const on = section === s.id;
+              const accent = productMeta[product]?.accent;
+              const count = sectionCount(s.id);
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => setSection(on ? "" : s.id)}
+                  className={`shrink-0 rounded-full px-3 py-1.5 text-[13px] font-medium transition ${
+                    on ? "text-white" : "border border-slate-200 text-slate-600 hover:bg-slate-100"
+                  }`}
+                  style={on ? { backgroundColor: accent || "#0f172a" } : undefined}
+                >
+                  {s.label}
+                  <span className={`ml-1.5 text-[11px] ${on ? "text-white/70" : "text-slate-400"}`}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         <div className="mb-4 flex items-center justify-between gap-3">
           <p className="text-sm text-slate-500">
             {loading ? "Loading…" : `${visible.length} asset${visible.length === 1 ? "" : "s"}`}

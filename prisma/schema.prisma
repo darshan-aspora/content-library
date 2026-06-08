@@ -36,6 +36,7 @@ model Asset {
   description String?
   type        String // pdf | script | image | video | gif | template | graphic
   pod         String   @default("general") // general | remittance | gold | nri
+  section     String   @default("") // sub-category within a pod, e.g. buy | sell | leasing | explore
   platform    String   @default("all") // all | instagram | x | youtube
   language    String   @default("en") // en | ml
   creatorType String   @default("any") // any | finance | non-finance
@@ -56,6 +57,7 @@ model Asset {
 
   @@index([categoryId])
   @@index([pod])
+  @@index([section])
   @@index([platform])
   @@index([language])
   @@index([creatorType])

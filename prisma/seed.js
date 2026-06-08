@@ -1,6 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import crypto from "node:crypto";
 import { remittanceScreens } from "./data/remittance-screens.js";
+import { brandAssets } from "./data/brand-assets.js";
+import { nriScreens } from "./data/nri-screens.js";
+import { sectionFor } from "./data/sections.js";
 
 const prisma = new PrismaClient();
 
@@ -59,6 +62,7 @@ const tree = [
       { name: "X (Twitter)", slug: "gfx-x", note: "Platform-specific dimensions" },
       { name: "YouTube", slug: "gfx-youtube", note: "Platform-specific dimensions" },
       { name: "Trust markers", slug: "gfx-trust", note: "Reviews, 1M+ downloads visuals" },
+      { name: "Logos & Brand Kit", slug: "brand-logos", note: "Aspora logos, logomarks and icons in every colour & format" },
     ],
   },
 ];
@@ -131,17 +135,19 @@ async function main() {
     }
   }
 
-  for (const a of [...goldExtras, ...appScreens, ...remittanceScreens]) {
+  for (const a of [...goldExtras, ...appScreens, ...remittanceScreens, ...brandAssets, ...nriScreens]) {
     const categoryId = slugToId[a.slug];
     if (!categoryId) continue;
     const exists = await prisma.asset.findFirst({ where: { title: a.title } });
     if (exists) continue;
+    const pod = a.pod ?? "general";
     await prisma.asset.create({
       data: {
         title: a.title,
         description: a.description,
         type: a.type,
-        pod: a.pod ?? "general",
+        pod,
+        section: a.section ?? sectionFor({ pod, tags: a.tags, title: a.title, type: a.type }),
         platform: a.platform ?? "all",
         language: a.language ?? "en",
         creatorType: a.creatorType ?? "any",
