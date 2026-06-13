@@ -14,7 +14,7 @@ export default function AssetCard({ asset, onPreview }) {
       <button
         onClick={() => onPreview(asset)}
         title={asset.title}
-        className="relative block w-full overflow-hidden rounded-2xl bg-slate-100 transition duration-200 group-hover:-translate-y-0.5 group-hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
+        className="relative block w-full overflow-hidden rounded-2xl border border-[#F4F4F4] bg-slate-100 transition duration-200 group-hover:-translate-y-0.5 group-hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
       >
         <div className="aspect-[402/844]">
           <AssetThumb asset={asset} className="h-full w-full" />
